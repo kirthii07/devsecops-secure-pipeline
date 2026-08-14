@@ -27,7 +27,17 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
+      - name: Check project structure
+        run: |
+          pwd
+          ls -la
+          ls -la app
+          ls -la tests
+
       - name: Run tests
         env:
-          PYTHONPATH: .
-        run: pytest
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python -c "import sys; print(sys.path)"
+          python -c "from app.app import app; print('App import successful')"
+          python -m pytest
