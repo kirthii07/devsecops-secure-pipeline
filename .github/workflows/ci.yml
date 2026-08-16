@@ -26,6 +26,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest
+      - name: Dependency Security Scan
+        run: |
+          pip install pip-audit
+          pip-audit
 
       - name: Check project structure
         run: |
