@@ -26,10 +26,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest
+
       - name: Dependency Security Scan
         run: |
           pip install pip-audit
           pip-audit
+
       - name: Secret Scan
         uses: gitleaks/gitleaks-action@v2
         env:
@@ -49,3 +51,16 @@ jobs:
           python -c "import sys; print(sys.path)"
           python -c "from app.app import app; print('App import successful')"
           python -m pytest
+
+      - name: Build Docker image
+        run: |
+          docker build --pull -t devsecops-app:${{ github.sha }} .
+
+      - name: Trivy Container Security Scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: devsecops-app:${{ github.sha }}
+          format: table
+          exit-code: "1"
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
