@@ -52,7 +52,7 @@ jobs:
           python -c "from app.app import app; print('App import successful')"
           python -m pytest
 
-           - name: Build Docker image
+      - name: Build Docker image
         run: |
           docker build --pull -t devsecops-app:${{ github.sha }} .
 
